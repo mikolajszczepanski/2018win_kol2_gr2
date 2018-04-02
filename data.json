@@ -1,0 +1,12 @@
+{
+     "Diary 1": {
+        "1" : {"lastname": "Kowalski", "grade": 5, "firstname": "Jan", "attendance": 3}, 
+        "2" : {"lastname": "Kowalski", "grade": 4, "firstname": "Anna", "attendance": 12}, 
+        "3" : {"lastname": "Kowalski", "grade": 1, "firstname": "Ignacy", "attendance": 3}
+     },
+     "Diary 2": {
+        "1" : {"lastname": "Smith", "grade": 4, "firstname": "John", "attendance": 10}, 
+        "2" : {"lastname": "Smith", "grade": 4, "firstname": "Ann", "attendance": 11}, 
+        "3" : {"lastname": "White", "grade": 4.5, "firstname": "Bill", "attendance": 10}
+     }
+}

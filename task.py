@@ -23,53 +23,49 @@
 #Your program must be runnable with command "python task.py".
 #Show some usecases of your library in the code (print some things)
 
-class Student:
-	def __init__(self, firstname, lastname):
-		self.firstname = firstname
-		self.lastname = lastname
-	def __str__(self):
-		return 'Student: ' + str(self.firstname) + ' ' + str(self.lastname)
+import json
 
-class Class:
-	def __init__(self, title):
-		self.title = title
-		self.students = []
+def load_data(filename):
+	return json.load(open(filename))
 
-	def add_student(self,student):
-		self.students.append((student,[]))
+def set_student(diary, **kwargs):
+	student = {}
+	student["firstname"] = kwargs["firstname"]
+	student["lastname"] = kwargs["lastname"]
+	student["grade"] = kwargs["grade"]
+	student["attendance"] = kwargs["attendance"]
+	diary[kwargs["student_index"]] = student
 
-	def get_students(self):
-		return map(lambda s: s[0], self.students)
+def set_diary(data, **kwargs):
+	data[kwargs["diary_index"]] = {}
 
-	def add_score_for_student(self,student,score):
-		student_index = self.get_students().index(student)
-		self.students[student_index][1].append(score)
+def get_diary_avg(data,used_key):
+	elements = [data[student_key][used_key] for student_key in data]
+	if len(elements) == 0:
+		return 0
+	return sum(elements) / float(len(elements)) 
 
-	def __str__(self):
-		return_str = 'Class ' + self.title
-		for student in self.students:
-			return_str = return_str + '\n' + str(student[0]) + ' scores: ' + str(student[1])
-		return return_str
+def get_total_avg(data, used_key):
+	elements = [data[diary_key][student_key][used_key] for diary_key in data for student_key in data[diary_key]]
+	if len(elements) == 0:
+		return 0
+	return sum(elements) / float(len(elements)) 
+
+def save_data(data,filename):
+    with open(filename, 'w') as outfile:
+		json.dump(data, outfile)
+
+if __name__ == "__main__":
+	data = load_data('data.json')
 	
-		
-def main():
-	test_student_1 = Student("Jan","Kowalski")
-	test_student_2 = Student("Iwona","Kowalska")
+	set_diary(data,diary_index='New Diary')
+	set_student(data['New Diary'], firstname="Jan", lastname="Nowy", grade=4, attendance=2, student_index=1)
+	
+	print('Avg total grade: {0}'.format(get_total_avg(data,'grade')))
+	print('Avg total attendance: {0}'.format(get_total_avg(data,'attendance')))
 
-	python_class = Class("Python")
+	for diary_key in data:
+		print('Avg grade for {0}: {1}'.format(diary_key,get_diary_avg(data[diary_key],'grade')))
+		print('Avg attendance for {0}: {1}'.format(diary_key,get_diary_avg(data[diary_key],'attendance')))
 
-	python_class.add_student(test_student_1)
-	python_class.add_student(test_student_2)
-
-	python_class.add_score_for_student(test_student_1, 3.0)
-	python_class.add_score_for_student(test_student_2, 3.5)
-
-	print(str(python_class))
-	print('main')
-
-
-print('start')
-main()
-
-
-
+	save_data(data,'data2.json')
